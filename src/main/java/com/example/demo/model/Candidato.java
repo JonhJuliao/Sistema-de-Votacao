@@ -9,8 +9,14 @@ public class Candidato extends Pessoa {
 
     private String partido;
 
-    public Candidato(CPF cpf, String nome, int idade) {
+    public Candidato(CPF cpf, String nome, int idade, Integer numero, String partido) {
         super(cpf, nome, idade);
+        this.numero = numero;
+        this.partido = partido;
+    }
+
+    public Candidato() {
+        super();
     }
 
     public Integer getNumero() {

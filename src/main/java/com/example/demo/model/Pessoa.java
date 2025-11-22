@@ -24,6 +24,9 @@ public class Pessoa {
         this.idade = idade;
     }
 
+    public Pessoa() {
+    }
+
     public Long getId() {
         return id;
     }

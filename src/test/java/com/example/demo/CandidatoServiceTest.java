@@ -2,13 +2,14 @@ package com.example.demo;
 
 import com.example.demo.model.CPF;
 import com.example.demo.model.Candidato;
-import com.example.repository.CandidatoRepository;
+import com.example.demo.repository.CandidatoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,7 +42,7 @@ class CandidatoServiceTest {
         candidato.setNumero(1234);
         candidato.setPartido("ABC");
 
-        when(candidatoRepository.existsByCpf("11111111111")).thenReturn(false);
+        when(candidatoRepository.existsByCpf(new CPF("11111111111"))).thenReturn(false);
         when(candidatoRepository.existsByNumero(1234)).thenReturn(false);
         when(candidatoRepository.save(any(Candidato.class)))
                 .thenAnswer(invocation -> {
@@ -61,7 +62,7 @@ class CandidatoServiceTest {
         assertEquals(1234, salvo.getNumero());
         assertEquals("ABC", salvo.getPartido());
 
-        verify(candidatoRepository).existsByCpf("11111111111");
+        verify(candidatoRepository).existsByCpf(new CPF("11111111111"));
         verify(candidatoRepository).existsByNumero(1234);
         verify(candidatoRepository).save(any(Candidato.class));
     }
@@ -85,7 +86,7 @@ class CandidatoServiceTest {
         );
 
         assertEquals("CPF já cadastrado para outro candidato", ex.getMessage());
-        verify(candidatoRepository).existsByCpf("11111111111");
+        verify(candidatoRepository).existsByCpf(new CPF("11111111111"));
         verify(candidatoRepository, never()).existsByNumero(anyInt());
         verify(candidatoRepository, never()).save(any());
     }
@@ -100,7 +101,7 @@ class CandidatoServiceTest {
         candidato.setNumero(1234);
         candidato.setPartido("ABC");
 
-        when(candidatoRepository.existsByCpf("22222222222")).thenReturn(false);
+        when(candidatoRepository.existsByCpf(new CPF("22222222222"))).thenReturn(false);
         when(candidatoRepository.existsByNumero(1234)).thenReturn(true);
 
         // act + assert
@@ -110,7 +111,7 @@ class CandidatoServiceTest {
         );
 
         assertEquals("Número de candidato já está em uso", ex.getMessage());
-        verify(candidatoRepository).existsByCpf("22222222222");
+        verify(candidatoRepository).existsByCpf(new CPF("22222222222"));
         verify(candidatoRepository).existsByNumero(1234);
         verify(candidatoRepository, never()).save(any());
     }
@@ -132,7 +133,7 @@ class CandidatoServiceTest {
         );
 
         assertEquals("Candidato deve ser maior de idade", ex.getMessage());
-        verify(candidatoRepository, never()).existsByCpf(anyString());
+        verify(candidatoRepository, never()).existsByCpf((new CPF("33333333333")));
         verify(candidatoRepository, never()).existsByNumero(anyInt());
         verify(candidatoRepository, never()).save(any());
     }
@@ -151,28 +152,28 @@ class CandidatoServiceTest {
         candidato.setNumero(1234);
         candidato.setPartido("ABC");
 
-        when(candidatoRepository.findByCpf("11111111111"))
+        when(candidatoRepository.findByCpf(new CPF("11111111111")))
                 .thenReturn(Optional.of(candidato));
 
         Optional<Candidato> resultado =
-                candidatoService.listarCandidatoPorCPF("11111111111");
+                candidatoService.listarCandidatoPorCPF(new CPF("11111111111"));
 
         assertTrue(resultado.isPresent());
         assertEquals("Fulano", resultado.get().getNome());
         assertEquals(1234, resultado.get().getNumero());
-        verify(candidatoRepository).findByCpf("11111111111");
+        verify(candidatoRepository).findByCpf(new CPF("11111111111"));
     }
 
     @Test
     void deveRetornarVazioQuandoNaoEncontrarCandidatoPorCpf() {
-        when(candidatoRepository.findByCpf("99999999999"))
+        when(candidatoRepository.findByCpf(new CPF("99999999999")))
                 .thenReturn(Optional.empty());
 
         Optional<Candidato> resultado =
-                candidatoService.listarCandidatoPorCPF("99999999999");
+                candidatoService.listarCandidatoPorCPF(new CPF("99999999999"));
 
         assertTrue(resultado.isEmpty());
-        verify(candidatoRepository).findByCpf("99999999999");
+        verify(candidatoRepository).findByCpf(new CPF("99999999999"));
     }
 
     // --------------------------------------------------------------------
@@ -182,8 +183,8 @@ class CandidatoServiceTest {
     @Test
     void deveListarTodosOsCandidatos() {
         List<Candidato> candidatos = List.of(
-                criarCandidato(1L, "11111111111", "Fulano", 40, 10, "ABC"),
-                criarCandidato(2L, "22222222222", "Ciclano", 50, 20, "XYZ")
+                criarCandidato(1L, new CPF("11111111111"), "Fulano", 40, 10, "ABC"),
+                criarCandidato(2L, new CPF("22222222222"), "Ciclano", 50, 20, "XYZ")
         );
 
         when(candidatoRepository.findAll()).thenReturn(candidatos);
@@ -200,7 +201,7 @@ class CandidatoServiceTest {
 
     @Test
     void deveAtualizarRegistroDeCandidatoPorCpf() {
-        String cpf = "11111111111";
+        CPF cpf = new CPF("11111111111");
 
         Candidato existente = criarCandidato(1L, cpf, "Fulano", 40, 10, "ABC");
         Candidato novosDados = new Candidato();
@@ -229,7 +230,7 @@ class CandidatoServiceTest {
 
     @Test
     void deveLancarErroAoTentarAtualizarCandidatoInexistente() {
-        String cpf = "00000000000";
+        CPF cpf = new CPF("00000000000");
         Candidato novosDados = new Candidato();
         novosDados.setNome("Novo");
         novosDados.setNumero(50);
