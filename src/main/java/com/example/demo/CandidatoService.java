@@ -3,10 +3,12 @@ package com.example.demo;
 import com.example.demo.model.CPF;
 import com.example.demo.model.Candidato;
 import com.example.demo.repository.CandidatoRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CandidatoService {
 
     private final CandidatoRepository candidatoRepository;
