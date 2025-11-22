@@ -1,6 +1,7 @@
 package com.example.demo;
 
-import com.example.model.Candidato;
+import com.example.demo.model.CPF;
+import com.example.demo.model.Candidato;
 import com.example.repository.CandidatoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class CandidatoServiceTest {
     void deveRegistrarCandidatoComSucesso() {
         // arrange
         Candidato candidato = new Candidato();
-        candidato.setCpf("11111111111");
+        candidato.setCpf(new CPF("11111111111"));
         candidato.setNome("Fulano da Silva");
         candidato.setIdade(35);
         candidato.setNumero(1234);
@@ -69,13 +70,13 @@ class CandidatoServiceTest {
     void naoDeveRegistrarCandidatoComCpfDuplicado() {
         // arrange
         Candidato candidato = new Candidato();
-        candidato.setCpf("11111111111");
+        candidato.setCpf(new CPF("11111111111"));
         candidato.setNome("Fulano da Silva");
         candidato.setIdade(40);
         candidato.setNumero(1234);
         candidato.setPartido("ABC");
 
-        when(candidatoRepository.existsByCpf("11111111111")).thenReturn(true);
+        when(candidatoRepository.existsByCpf(new CPF("11111111111"))).thenReturn(true);
 
         // act + assert
         IllegalArgumentException ex = assertThrows(
@@ -93,7 +94,7 @@ class CandidatoServiceTest {
     void naoDeveRegistrarCandidatoComNumeroDuplicado() {
         // arrange
         Candidato candidato = new Candidato();
-        candidato.setCpf("22222222222");
+        candidato.setCpf(new CPF("22222222222"));
         candidato.setNome("Ciclano");
         candidato.setIdade(50);
         candidato.setNumero(1234);
@@ -118,7 +119,7 @@ class CandidatoServiceTest {
     void naoDeveRegistrarCandidatoMenorDeIdade() {
         // arrange
         Candidato candidato = new Candidato();
-        candidato.setCpf("33333333333");
+        candidato.setCpf(new CPF("33333333333"));
         candidato.setNome("Jovem");
         candidato.setIdade(16); // menor de idade
         candidato.setNumero(5555);
@@ -144,7 +145,7 @@ class CandidatoServiceTest {
     void deveListarCandidatoPorCpfQuandoExistir() {
         Candidato candidato = new Candidato();
         candidato.setId(1L);
-        candidato.setCpf("11111111111");
+        candidato.setCpf(new CPF("11111111111"));
         candidato.setNome("Fulano");
         candidato.setIdade(30);
         candidato.setNumero(1234);
@@ -251,7 +252,7 @@ class CandidatoServiceTest {
     // helper
     // --------------------------------------------------------------------
 
-    private Candidato criarCandidato(Long id, String cpf, String nome,
+    private Candidato criarCandidato(Long id, CPF cpf, String nome,
                                      int idade, int numero, String partido) {
         Candidato c = new Candidato();
         c.setId(id);
