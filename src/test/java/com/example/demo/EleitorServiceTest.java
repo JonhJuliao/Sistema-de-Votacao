@@ -20,7 +20,7 @@ class EleitorServiceTest {
 
         EleitorRepository repo = mock(EleitorRepository.class);
 
-        when(repo.findByCpfValue("12345678909"))
+        when(repo.findByCpfValor("12345678909"))
                 .thenReturn(Optional.empty());
 
         EleitorService service = new EleitorService(repo);
@@ -29,8 +29,7 @@ class EleitorServiceTest {
 
         assertNotNull(eleitor);
         assertEquals("Guilherme", eleitor.getNome());
-        assertEquals("12345678909", eleitor.getCpf().getValue());
-    }
+        assertEquals("12345678909", eleitor.getCpf().getValor());}
 
     @Test
     @DisplayName("não deve cadastrar eleitor com CPF duplicado")
@@ -38,7 +37,7 @@ class EleitorServiceTest {
 
         EleitorRepository repo = mock(EleitorRepository.class);
 
-        when(repo.findByCpfValue("12345678909"))
+        when(repo.findByCpfValor("12345678909"))
                 .thenReturn(Optional.of(new Eleitor()));
 
         EleitorService service = new EleitorService(repo);
