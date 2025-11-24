@@ -46,4 +46,19 @@ class EleitorServiceTest {
             service.cadastrar("Fulano", new CPF("123.456.789-09"));
         });
     }
+        @Test
+        @DisplayName("novo eleitor deve iniciar com jaVotou = false")
+        void novoEleitorDeveIniciarComJaVotouFalse() {
+
+            EleitorRepository repo = mock(EleitorRepository.class);
+
+            when(repo.findByCpfValor("12345678909"))
+                    .thenReturn(Optional.empty());
+
+            EleitorService service = new EleitorService(repo);
+
+            Eleitor eleitor = service.cadastrar("Guilherme", new CPF("123.456.789-09"));
+
+            assertFalse(eleitor.isJaVotou());
+    }
 }
