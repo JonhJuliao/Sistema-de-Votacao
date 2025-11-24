@@ -33,7 +33,7 @@ class VotoServiceTest {
 
 
     // ---------------------------------------------
-    // 1. Eleitor não pode votar duas vezes
+    // Eleitor não pode votar duas vezes
     // ---------------------------------------------
     @Test
     void deveImpedirVotoDuplicado() {
@@ -54,11 +54,11 @@ class VotoServiceTest {
 
 
     // ---------------------------------------------
-    // 2. Deve registrar voto corretamente
+    // Deve registrar voto corretamente
     // ---------------------------------------------
     @Test
     void deveRegistrarVotoComSucesso() {
-        CPF cpf = new CPF("12312312399");
+        CPF cpf = new CPF("11144477735");
 
         Candidato candidato = new Candidato();
         candidato.setId(1L);
@@ -83,11 +83,11 @@ class VotoServiceTest {
 
 
     // ---------------------------------------------
-    // 3. Falha ao votar em candidato inexistente
+    // Falha ao votar em candidato inexistente
     // ---------------------------------------------
     @Test
     void deveFalharSeCandidatoNaoExiste() {
-        CPF cpf = new CPF("55511122233");
+        CPF cpf = new CPF("11144477735");
 
         when(votoRepository.existsByCpfEleitor(cpf))
                 .thenReturn(false);

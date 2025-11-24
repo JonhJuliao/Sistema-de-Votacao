@@ -15,4 +15,6 @@ public interface CandidatoRepository extends JpaRepository<Candidato, Long> {
     boolean existsByNumero(Integer numero);
 
     Optional<Candidato> findByCpf(CPF cpf);
+    
+    Optional<Candidato> findByNumero(Integer numero);
 }
