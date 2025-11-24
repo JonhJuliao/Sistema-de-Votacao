@@ -20,20 +20,22 @@ public class VotoService {
 
     public Voto registrarVoto(CPF cpf, Integer numeroCandidato) {
 
-        // Regra 1: eleitor só vota uma vez
+        validaSeVotou(cpf);
+
+        Candidato candidato = buscarCandidato(numeroCandidato);
+
+        Voto voto = new Voto(cpf, candidato);
+        return votoRepository.save(voto);
+    }
+    
+    private void validaSeVotou(CPF cpf) {
         if (votoRepository.existsByCpfEleitor(cpf)) {
             throw new IllegalArgumentException("Eleitor já votou");
         }
+    }
 
-        // Regra 2: candidato deve existir
-        Candidato candidato = candidatoRepository.findByNumero(numeroCandidato)
+    private Candidato buscarCandidato(Integer numero) {
+        return candidatoRepository.findByNumero(numero)
                 .orElseThrow(() -> new IllegalArgumentException("Candidato não encontrado"));
-
-        // Regra 3: criar voto corretamente
-        Voto voto = new Voto();
-        voto.setCpfEleitor(cpf);
-        voto.setCandidato(candidato);
-
-        return votoRepository.save(voto);
     }
 }

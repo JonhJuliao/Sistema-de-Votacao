@@ -23,15 +23,16 @@ public class Voto {
         return cpfEleitor;
     }
 
-    public void setCpfEleitor(CPF cpfEleitor) {
-        this.cpfEleitor = cpfEleitor;
-    }
-
     public Candidato getCandidato() {
         return candidato;
     }
+    
+    protected Voto() {	
+    }
 
-    public void setCandidato(Candidato candidato) {
+    public Voto(CPF cpf, Candidato candidato) {
+        this.cpfEleitor = cpf;
         this.candidato = candidato;
     }
+
 }
