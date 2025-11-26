@@ -3,6 +3,8 @@ package com.example.demo;
 import com.example.demo.model.CPF;
 import com.example.demo.model.Candidato;
 import com.example.demo.repository.CandidatoRepository;
+import com.example.demo.service.CandidatoService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
