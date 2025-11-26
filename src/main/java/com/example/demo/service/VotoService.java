@@ -7,6 +7,10 @@ import com.example.demo.repository.CandidatoRepository;
 import com.example.demo.repository.VotoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
 public class VotoService {
 
@@ -38,4 +42,16 @@ public class VotoService {
         return candidatoRepository.findByNumero(numero)
                 .orElseThrow(() -> new IllegalArgumentException("Candidato não encontrado"));
     }
+
+    public Map<Candidato, Long> apurarVotos() {
+
+        List<Voto> votos = votoRepository.findAll();
+
+        return votos.stream()
+                .collect(Collectors.groupingBy(
+                        Voto::getCandidato,
+                        Collectors.counting()
+                ));
+    }
+
 }
