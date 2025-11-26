@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.service;
 
 import com.example.demo.model.CPF;
 import com.example.demo.model.Candidato;
@@ -6,6 +6,11 @@ import com.example.demo.model.Voto;
 import com.example.demo.repository.CandidatoRepository;
 import com.example.demo.repository.VotoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VotoService {
@@ -38,4 +43,18 @@ public class VotoService {
         return candidatoRepository.findByNumero(numero)
                 .orElseThrow(() -> new IllegalArgumentException("Candidato não encontrado"));
     }
+
+    @Transactional(readOnly = true)
+    public Map<Candidato, Long> apurarVotos() {
+
+        List<Voto> votos = votoRepository.findAll();
+
+        Map<Candidato, Long> resultado = votos.stream()
+                .collect(Collectors.groupingBy(
+                        Voto::getCandidato,
+                        Collectors.counting()
+                ));
+        return Map.copyOf(resultado);
+    }
+
 }
