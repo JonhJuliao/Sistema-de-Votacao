@@ -6,6 +6,7 @@ import com.example.demo.model.Voto;
 import com.example.demo.repository.CandidatoRepository;
 import com.example.demo.repository.VotoRepository;
 
+import com.example.demo.service.VotoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
